@@ -1,0 +1,20 @@
+services:
+  browser:
+    # It is recommended to use full tag(in this case is 131.0) to pin a specific browser instead of latest
+    image: selenium/standalone-chrome:131.0
+    shm_size: '2g'
+    ports:
+      - "4444:4444"  # Default port for Selenium WebDriver
+
+  tests:
+    build: .
+    depends_on:
+      - browser
+    environment:
+      - SELENIUM_HOST=browser
+      - SELENIUM_PORT=4444
+    entrypoint: ["pytest", "tests"]
+#    entrypoint: ["sh", "-c", "while true; do sleep 1000; done"]
+    volumes:
+      - .:/project
+
